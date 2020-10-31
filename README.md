@@ -7,7 +7,7 @@ Aplikasi Dot Product pada Sistem Temu-balik Informasi
 * Raihan Astrada Fathurrahman (13519113)
 
 ## Deskripsi singkat
-Cara kerja program mirip dengan mesin pencari seperti Google dan Bing. Program dibuat berbasis web dan akan menerima input kumpulan dokumen beserta search query dari user lalu mengembalikan hasil query sesuai peringkat similaritas dari dokumen-dokumen yang diberikan.
+Cara kerja program mirip dengan mesin pencari seperti Google dan Bing. Program dibuat berbasis web dan akan menerima input kumpulan dokumen beserta search query dari user lalu mengembalikan hasil query sesuai peringkat kesamaan dari dokumen-dokumen yang diberikan. Dokumen terlebih dahulu diproses dengan melakukan stemming dan penghapusan stopwords, kemudian kesamaan dicari menggunakan cosine similarity.
 
 ## Teknologi
 * TBD
