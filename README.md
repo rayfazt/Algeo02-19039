@@ -16,7 +16,7 @@ Cara kerja program mirip dengan mesin pencari seperti Google dan Bing. Program d
 ## Cara menjalankan
 ```
 git clone https://github.com/rayfazt/Algeo02-19039.git
-cd Algeo02-19039
+cd Algeo02-19039/src
 python main.py runserver
 ```
 
