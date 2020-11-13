@@ -10,12 +10,15 @@ Aplikasi Dot Product pada Sistem Temu-balik Informasi
 Cara kerja program mirip dengan mesin pencari seperti Google dan Bing. Program dibuat berbasis web dan akan menerima input kumpulan dokumen beserta search query dari user lalu mengembalikan hasil query sesuai peringkat kesamaan dari dokumen-dokumen yang diberikan. Dokumen terlebih dahulu diproses dengan melakukan stemming dan penghapusan stopwords, kemudian kesamaan dicari menggunakan cosine similarity.
 
 ## Teknologi
-* TBD
-* TBD
-* TBD
+* Flask
+* HTML/CSS/Bootstrap
 
 ## Cara menjalankan
-TBD.
+```
+git clone https://github.com/rayfazt/Algeo02-19039.git
+cd Algeo02-19039
+python main.py runserver
+```
 
 ## Fitur
 Done
