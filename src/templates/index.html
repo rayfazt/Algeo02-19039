@@ -1,0 +1,29 @@
+{% extends "layout.html" %}
+{% block content %}
+<form action="search" method="POST">
+    <div  class="row medium-margin-top">
+        <div class="col-8 offset-2">
+            <div class="form-group">
+                <input placeholder="Enter search query" type="text" name="query" id="query" class="form-control" value="{{request.form['query']}}">
+                <button class="margin-top btn btn-info btn-block">Search</button>
+            </div>
+        </div>            
+    </div>
+</form>
+<div class="row margin-top">
+    {% if results is none %}
+        <div class="col-8 offset-2 text-center">No matching results found</div>
+    {% else %}
+        <div class="col-8 offset-1">
+            <ul class="resultset">
+                {% for result in results %}
+                    <li>
+                        <div>
+                        </div>
+                    </li>
+                {% endfor %}
+            </ul>
+        </div>
+    {% endif %}
+</div>
+{% endblock %}
