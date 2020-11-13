@@ -1,28 +1,19 @@
 from flask import Flask, render_template, request
-import requests
+import os
 
 app = Flask(__name__)
 
 @app.route('/')
 def index():
-    results = []
-    return render_template('index.html',results=results)
+    return render_template('index.html')
 
 @app.route('/search',methods=['POST'])
 def search():
-    if request.method == 'POST':
-        form_data = request.form
-        results = []
-    return render_template('index.html',results=results)
+    return render_template('index.html')
 
-@app.route('/upload')
+@app.route('/upload',methods=['POST'])
 def upload():
-    message = ''
-    args = request.args
-    if 'message' in args:
-        message = args.get('message')
-    
-    return render_template('upload.html',message=message)
+    return render_template('result.html')
 
 @app.route('/about')
 def about():

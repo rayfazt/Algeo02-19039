@@ -10,20 +10,4 @@
         </div>            
     </div>
 </form>
-<div class="row margin-top">
-    {% if results is none %}
-        <div class="col-8 offset-2 text-center">No matching results found</div>
-    {% else %}
-        <div class="col-8 offset-1">
-            <ul class="resultset">
-                {% for result in results %}
-                    <li>
-                        <div>
-                        </div>
-                    </li>
-                {% endfor %}
-            </ul>
-        </div>
-    {% endif %}
-</div>
 {% endblock %}
