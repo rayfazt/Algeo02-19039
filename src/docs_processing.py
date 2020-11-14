@@ -18,7 +18,7 @@ def is_link_double(list,filename,idx):
 
 def retrieve_docs():
     # Get News Link
-    r = requests.get('https://www.thejakartapost.com/seasia')
+    r = requests.get('https://thejakartapost.com/seasia')
 
     soup = BeautifulSoup(r.content, 'html.parser')
     link = []
@@ -41,6 +41,15 @@ def retrieve_docs():
       for i in soup.find('div', {'class':'col-md-10 col-xs-12 detailNews'}).find_all('p'):
           sen.append(i.text)
       documents.append(' '.join(sen))
+
+    #Retrieve Title
+    titles=[]
+    count = 0
+    for i in link:
+      r = requests.get(i)
+      soup = BeautifulSoup(r.content, 'html.parser')
+      for i in soup.find('div', {'class':'col-md-10 col-xs-12 detailNews'}).find_all('p'):
+          titles.append(i.find('title'))
     
     return documents
 
@@ -102,9 +111,7 @@ import pandas as pd
 from sklearn.feature_extraction.text import TfidfVectorizer
 
 def get_similar_articles(q, df, database_awal):
-  print("query:", q)
-  print("Berikut artikel dengan nilai cosine similarity tertinggi: ")
-  # Convert the query become a vector
+  # Convert the query to a vector
   q = [q]
   q_vec = vectorizer.transform(q).toarray().reshape(df.shape[0],)
   sim = {}
@@ -117,8 +124,10 @@ def get_similar_articles(q, df, database_awal):
   # Print the articles and their similarity values
   for k, v in sim_sorted:
     if v != 0.0:
-      print("Nilai Similaritas:", v)
-      print(database_awal[k])
+      s = database_awal[k]
+      print("Jumlah Kata:", len(s.split()))  
+      print("Tingkat Kemiripan:", v*100, '%')
+      print(s[0:s.find('.')])
       print()
 
 docs = [] # Setelah di pre-procces digabung jadi satu sentence
@@ -135,7 +144,6 @@ X = X.T.toarray()
 df = pd.DataFrame(X, index=vectorizer.get_feature_names())
 
 # Add The Query
-q1 = 'the philippines reopened the famous boracay resort island in the country central region this month as part of its bid to boost the country economy'
+q1 = 'asean'
 # Call the function
 get_similar_articles(q1, df, database)
-print(database[24])
