@@ -32,7 +32,6 @@ def retrieve_docs():
     
     # Retrieve Paragraph
     documents=[]
-    count = 0
     for i in link:
       r = requests.get(i)
       soup = BeautifulSoup(r.content, 'html.parser')
@@ -41,17 +40,32 @@ def retrieve_docs():
       for i in soup.find('div', {'class':'col-md-10 col-xs-12 detailNews'}).find_all('p'):
           sen.append(i.text)
       documents.append(' '.join(sen))
+    
+    return documents
+
+def get_title():
+    # Get News Link
+    r = requests.get('https://thejakartapost.com/seasia')
+
+    soup = BeautifulSoup(r.content, 'html.parser')
+    link = []
+
+    idx = 0
+    for i in soup.find('div', {'class':'col-md-12 col-xs-12 channelLatest channelPage'}).find_all('a'):
+      i['href'] = i['href'] + '?page=all'
+      if ( not(is_link_double(link,i['href'],idx))  and (i['href'] != 'https://www.thejakartapost.com/seasia?page=all') and (i['href'] != 'https://www.thejakartapost.com/seasia/index?page=all') ):
+        idx += 1
+        link.append(i['href'])
 
     #Retrieve Title
     titles=[]
-    count = 0
     for i in link:
       r = requests.get(i)
       soup = BeautifulSoup(r.content, 'html.parser')
-      for i in soup.find('div', {'class':'col-md-10 col-xs-12 detailNews'}).find_all('p'):
-          titles.append(i.find('title'))
-    
-    return documents
+      for i in soup.find('div', {'class':'col-xs-12 areaTitle'}).find_all('h1'):
+          titles.append(i.text)
+
+    return titles
 
 def clean_docs(documents):
     documents_clean = []
@@ -100,6 +114,7 @@ def stemming(documents):
 
 # DATA PRE-PROCESSING
 database = retrieve_docs()
+title = get_title()
 documents = clean_docs(database)
 filtered_documents = remove_stop_words(documents)
 stemmed_documents = stemming(filtered_documents)
@@ -110,7 +125,7 @@ import pandas as pd
 
 from sklearn.feature_extraction.text import TfidfVectorizer
 
-def get_similar_articles(q, df, database_awal):
+def get_similar_articles(q, df, database,title):
   # Convert the query to a vector
   q = [q]
   q_vec = vectorizer.transform(q).toarray().reshape(df.shape[0],)
@@ -122,13 +137,18 @@ def get_similar_articles(q, df, database_awal):
   # Sort the values 
   sim_sorted = sorted(sim.items(), key=lambda x: x[1], reverse=True)
   # Print the articles and their similarity values
+  cnt = 0
   for k, v in sim_sorted:
     if v != 0.0:
-      s = database_awal[k]
+      s = database[k]
+      print(title[k])
       print("Jumlah Kata:", len(s.split()))  
       print("Tingkat Kemiripan:", v*100, '%')
       print(s[0:s.find('.')])
       print()
+      cnt += 1
+  if cnt == 0:
+      print("No matching results found")
 
 docs = [] # Setelah di pre-procces digabung jadi satu sentence
 for i in range(len(documents)):
@@ -144,6 +164,6 @@ X = X.T.toarray()
 df = pd.DataFrame(X, index=vectorizer.get_feature_names())
 
 # Add The Query
-q1 = 'asean'
+q1 = input('Enter search query: ')
 # Call the function
-get_similar_articles(q1, df, database)
+get_similar_articles(q1, df, database, title)
