@@ -10,6 +10,11 @@ from nltk.corpus import stopwords
 from nltk.tokenize import word_tokenize
 from nltk.stem import PorterStemmer
 
+# FOR WEBSITE IMPLEMENTATION PURPOSE, SEARCH ENGINE
+import numpy as np
+import pandas as pd
+from sklearn.feature_extraction.text import TfidfVectorizer
+
 def is_link_double(list,filename,idx):
     if (idx == 0):
         return False
@@ -112,20 +117,25 @@ def stemming(documents):
     stemmed_documents.append(temp_array)
   return stemmed_documents
 
-# DATA PRE-PROCESSING
-database = retrieve_docs()
-title = get_title()
-documents = clean_docs(database)
-filtered_documents = remove_stop_words(documents)
-stemmed_documents = stemming(filtered_documents)
+def get_similar_articles(database,title):
+  documents = clean_docs(database)
+  filtered_documents = remove_stop_words(documents)
+  stemmed_documents = stemming(filtered_documents)
+  docs = [] # Setelah di pre-procces digabung jadi satu sentence
+  for i in range(len(documents)):
+    docs.append(' '.join(stemmed_documents[i]))
 
-# FOR WEBSITE IMPLEMENTATION PURPOSE, SEARCH ENGINE
-import numpy as np
-import pandas as pd
+  # Instantiate a TfidfVectorizer object
+  vectorizer = TfidfVectorizer()
+  # It fits the data and transform it as a vector
+  X = vectorizer.fit_transform(docs)
+  # Convert the X as transposed matrix
+  X = X.T.toarray()
+  # Create a DataFrame and set the vocabulary as the index
+  df = pd.DataFrame(X, index=vectorizer.get_feature_names())
 
-from sklearn.feature_extraction.text import TfidfVectorizer
-
-def get_similar_articles(q, df, database,title):
+  # Add The Query
+  q = input('Enter search query: ')
   # Convert the query to a vector
   q = [q]
   q_vec = vectorizer.transform(q).toarray().reshape(df.shape[0],)
@@ -150,20 +160,9 @@ def get_similar_articles(q, df, database,title):
   if cnt == 0:
       print("No matching results found")
 
-docs = [] # Setelah di pre-procces digabung jadi satu sentence
-for i in range(len(documents)):
-  docs.append(' '.join(stemmed_documents[i]))
-
-# Instantiate a TfidfVectorizer object
-vectorizer = TfidfVectorizer()
-# It fits the data and transform it as a vector
-X = vectorizer.fit_transform(docs)
-# Convert the X as transposed matrix
-X = X.T.toarray()
-# Create a DataFrame and set the vocabulary as the index
-df = pd.DataFrame(X, index=vectorizer.get_feature_names())
-
-# Add The Query
-q1 = input('Enter search query: ')
+'''
+database = retrieve_docs()
+titles = get_title()
 # Call the function
-get_similar_articles(q1, df, database, title)
+get_similar_articles(database, titles)
+'''
