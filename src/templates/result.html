@@ -1,0 +1,40 @@
+{% extends "layout.html" %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Gogle: Poor Man's Google</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="../static/style.css">
+</head>
+<body>
+    {% block content %}
+    <div class="container">
+        <div class="row">
+            <kbd style="background-color: burlywood;">Ini querynya: {{query}}</kbd>
+        </div>
+    </div>
+    <div  class="row margin-top">
+        <div class="col-8 offset-2">
+            <h4>Hasil Pencarian:</h4>
+            {% for data in titles %}
+                <div class ="list-group">
+                    <ul class="list-group">
+                        <li class="list-group-item list-group-item-primary">{{loop.index}}. {{titles[loop.index0]}}</li>
+                        <li class="list-group-item list-group-item-secondary">
+                            <p>Jumlah Kata: {{word_count[loop.index0]}}</p>
+                            <p>Tingkat Kemiripan: {{cos_sim[loop.index0]}}</p>
+                            <p style="color:royalblue">{{desc[loop.index0]}}</p>
+                        </li>
+                    </ul>
+                </div>
+                <hr>
+            {% endfor %}
+        </div>            
+    </div>
+    {% endblock %}
+</body>
+</html>
