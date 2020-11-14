@@ -3,7 +3,7 @@ import os
 from docs_processing import get_similar_articles
 from werkzeug.utils import secure_filename
 
-UPLOAD_FOLDER = '/Algeo02-19039/src'
+UPLOAD_FOLDER = '/Algeo02-19039/src/txt'
 
 app = Flask(__name__)
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
