@@ -1,0 +1,34 @@
+use Matriks
+
+function IsSegitigaBawah (M: MATRIKS) --> boolean
+Kamus
+i,j : indeks
+flag : boolean
+Algoritma
+    i<--GetFirstIdxBrs(M)
+    while i<=GetLastIdxBrs(M) and flag = true do
+        j<--i+1
+        while j <=GetLastIdxKol(M) and flag = true do
+            if(GetElmt(M,i,j)!=0)then
+                flag <-- false
+            {end if}
+            j<--j+1
+        {end while}
+        i<--i+1
+    {end while}
+    --> flag
+{end function}
+
+procedure DetriMatriks (input M:MATRIKS,output Det: integer)
+Kamus
+i : indeks
+Algoritma
+    if(IsSegitigaBawah(M))then
+        Det<--1
+        i traversal [GetFirstIdxBrs(M)..GetLastIdxBrs(M)]
+            Det<-- Det * GetElmtDiagonal(M,i)
+        {end for}
+    else
+        Det <-- 0
+    {end if}
+{end procedure}

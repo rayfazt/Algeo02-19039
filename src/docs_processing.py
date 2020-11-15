@@ -79,7 +79,7 @@ def get_title():
 
 def get_txt():
     docs = []
-    for file in Path('txt').rglob('*.txt'):
+    for file in Path('static').rglob('*.txt'):
         docs.append(file.parent/file.name)
     #return docs
 
@@ -92,7 +92,7 @@ def get_txt():
     return all_docs
 
 def title_txt():
-    titles = [os.path.splitext(filename)[0] for filename in os.listdir('txt')]
+    titles = [os.path.splitext(filename)[0] for filename in os.listdir('static')]
     return titles
 
 def clean_docs(documents):

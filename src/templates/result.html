@@ -23,12 +23,16 @@
             {% for data in titles %}
                 <div class ="list-group">
                     <ul class="list-group">
-                        <li class="list-group-item list-group-item-primary">{{loop.index}}. <a href="txt/{{doc_url[loop.index0]}}" target="_blank">{{titles[loop.index0]}}</a></li>
-                        <li class="list-group-item list-group-item-secondary">
+                        {% if input_id==1 %}
+                            <li class="list-group-item list-group-item-primary">{{loop.index}}. <a href='static/{{doc_url[loop.index0]}}.txt'>{{titles[loop.index0]}}</a></li>
+                        {% else %}
+                            <li class="list-group-item list-group-item-primary">{{loop.index}}. <a href="{{doc_url[loop.index0]}}" target="_blank">{{titles[loop.index0]}}</a></li>
+                        {% endif %}
+                            <li class="list-group-item list-group-item-secondary">
                             <p>Jumlah Kata: {{word_count[loop.index0]}}</p>
                             <p>Tingkat Kemiripan: {{cos_sim[loop.index0]}}</p>
                             <p style="color:orangered">{{desc[loop.index0]}}</p>
-                        </li>
+                            </li>
                     </ul>
                 </div>
                 <hr>
