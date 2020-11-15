@@ -1,4 +1,8 @@
-# Modules for Retrieving Files from Web
+# Modules for Retrieving Files
+# From Files
+import os
+from pathlib import Path
+# From Web
 import re
 import string
 import requests
@@ -73,6 +77,24 @@ def get_title():
 
     return titles
 
+def get_txt():
+    docs = []
+    for file in Path('txt').rglob('*.txt'):
+        docs.append(file.parent/file.name)
+    #return docs
+
+    all_docs = []
+    for doc in docs:
+        with open(doc) as f:
+          sen = f.read()
+        all_docs.append(sen)
+    
+    return all_docs
+
+def title_txt():
+    titles = [os.path.splitext(filename)[0] for filename in os.listdir('txt')]
+    return titles
+
 def clean_docs(documents):
     documents_clean = []
     for d in documents:
@@ -118,20 +140,28 @@ def stemming(documents):
     stemmed_documents.append(temp_array)
   return stemmed_documents
 
-def get_similar_articles(database,title):
+def preprocessing_docs(database):
+  documents = clean_docs(database)
+  filtered_documents = remove_stop_words(documents)
+  stemmed_documents = stemming(filtered_documents)
+  return stemmed_documents
+
+def get_DataFrame(database):
   documents = clean_docs(database)
   filtered_documents = remove_stop_words(documents)
   stemmed_documents = stemming(filtered_documents)
 
   # Making dataframe from stemmed_docs
-  df1 = pd.DataFrame(tfidf(stemmed_documents))
-  df1 = df1.reindex(sorted(df1.columns), axis=1)
-  df1 = df1.T
+  df = pd.DataFrame(tfidf(stemmed_documents))
+  df = df.reindex(sorted(df.columns), axis=1)
+  df = df.T
 
-  # Add The Query
-  q = input('Enter search query: ')
-  # Convert the query to a vector
-  q_tfidf = tfidf2(q, stemmed_documents)
+  return df
+
+def get_similiar(query, df, database):
+  documents = preprocessing_docs(database)
+
+  q_tfidf = tfidf2(query, documents)
   # Change to Dataframe for Sorting
   qdf = pd.DataFrame(list(q_tfidf.items()),columns = ['word','values'])
   qdf = qdf.sort_values(by = ['word'], ascending=True)
@@ -139,28 +169,10 @@ def get_similar_articles(database,title):
   q_vec = qdf['values'].tolist()
   sim = {}
   # Calculate the similarity
-  for i in range(len(stemmed_documents)):
-    sim[i] = dot_product(df1.loc[:, i].values, q_vec) / (norm(df1.loc[:, i]) * norm(q_vec))
+  for i in range(len(documents)):
+    sim[i] = dot_product(df.loc[:, i].values, q_vec) / (norm(df.loc[:, i]) * norm(q_vec))
     
   # Sort the values 
   sim_sorted = sorted(sim.items(), key=lambda x: x[1], reverse=True)
-  # Print the articles and their similarity values
-  cnt = 0
-  for k, v in sim_sorted:
-    if v != 0.0:
-      s = database[k]
-      print(title[k])
-      print("Jumlah Kata:", len(s.split()))  
-      print("Tingkat Kemiripan:", v*100, '%')
-      print(s[0:s.find('.')])
-      print()
-      cnt += 1
-  if cnt == 0:
-      print("No matching results found")
 
-'''
-database = retrieve_docs()
-titles = get_title()
-# Call the function
-get_similar_articles(database, titles)
-'''
+  return sim_sorted

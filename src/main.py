@@ -1,6 +1,6 @@
 from flask import Flask, render_template, request
 import os
-from docs_processing import get_similar_articles
+from docs_processing import *
 from werkzeug.utils import secure_filename
 
 UPLOAD_FOLDER = os.path.abspath('txt/')
@@ -16,18 +16,44 @@ def index():
 @app.route('/search',methods=['POST','GET'])
 def search():
     query = request.form['query']
-    uploaded_file= request.files.getlist('file')
-    for file in uploaded_file:
-        filename=secure_filename(file.filename)
-        file.save(os.path.join(app.config['UPLOAD_FOLDER'],filename))
+    if not query:
+        return render_template('index.html')
     
-    titles =['uzumaki bayu','uzumaki saburo']
-    doc_url=['kipli.txt','kipli2.txt']
-    desc=['ini isinya kalimat pertama','ini isinya kalimat kedua']
-    word_count=['203','102']
-    cos_sim=['0.709123','0.02312']
-    return render_template('result.html', query=query, titles=titles, doc_url=doc_url, desc=desc, word_count=word_count, cos_sim=cos_sim)
+    uploaded_file = request.files.getlist('file')
+    
+    empty_files = True
+    if uploaded_file:
+        empty_files = False
+    
+    if not (empty_files):    
+        for file in uploaded_file:
+            filename=secure_filename(file.filename)
+            file.save(os.path.join(app.config['UPLOAD_FOLDER'],filename))
+        database = get_txt()
+        titles = title_txt()
+        df = get_DataFrame(database)
+        sim_sorted = get_similiar(query, df, database)
 
+    else:    
+        database = retrieve_docs()
+        titles = get_title()
+        df = get_DataFrame(database)
+        sim_sorted = get_similiar(query, df, database)
+
+    arrTitles = []
+    arrDesc = []
+    arrWordCount = []
+    arrCosSim = []
+    arrUrl = []
+    for k, v in sim_sorted:
+        if v != 0.0:
+            s = database[k]
+            arrTitles.append(titles[k])
+            arrDesc.append(s[0:s.find('.')])
+            arrWordCount.append(len(s.split()))
+            arrCosSim.append(v*100)
+    
+    return render_template('result.html', query=query, titles=arrTitles, doc_url=arrUrl, desc=arrDesc, word_count=arrWordCount, cos_sim=arrCosSim)
 
 @app.route('/upload',methods=['POST'])
 def upload():
