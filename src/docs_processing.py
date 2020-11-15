@@ -39,7 +39,6 @@ def retrieve_docs():
       if ( not(is_link_double(link,i['href'],idx))  and (i['href'] != 'https://www.thejakartapost.com/seasia?page=all') and (i['href'] != 'https://www.thejakartapost.com/seasia/index?page=all') ):
         idx += 1
         link.append(i['href'])
-    
     # Retrieve Paragraph
     documents=[]
     for i in link:
@@ -176,3 +175,37 @@ def get_similiar(query, df, database):
   sim_sorted = sorted(sim.items(), key=lambda x: x[1], reverse=True)
 
   return sim_sorted
+
+def get_Tab(query, documents):
+  q_after = preprocessing_docs([query])
+  
+  q_sentence = [] # Setelah di pre-procces digabung jadi satu sentence
+  for i in range(len(q_after)):
+    q_sentence.append(' '.join(q_after[i]))
+  
+  q_sentence = ''.join(q_sentence)
+  q_words = q_sentence.split(" ")
+  q_total = set(q_words)
+
+  wordDict = dict.fromkeys(q_total,0)
+  wordDict_list = []
+  for word in q_words:
+    wordDict[word] += 1
+  wordDict_list.append(wordDict)
+    
+  for i in range(len(documents)):
+    wordDict = dict.fromkeys(q_total,0)
+    for word in documents[i]:
+      error = False
+      try:
+        wordDict[word] += 1
+      except KeyError:
+        error = True
+    wordDict_list.append(wordDict)
+  
+  # Query ada di column '0'
+  df = pd.DataFrame(wordDict_list)
+  df = df.reindex(sorted(df.columns), axis=1)
+  df = df.T
+  
+  return df

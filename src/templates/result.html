@@ -30,12 +30,19 @@
                         {% endif %}
                             <li class="list-group-item list-group-item-secondary">
                             <p>Jumlah Kata: {{word_count[loop.index0]}}</p>
-                            <p>Tingkat Kemiripan: {{cos_sim[loop.index0]}}</p>
+                            <p>Tingkat Kemiripan: {{cos_sim[loop.index0]}}%</p>
                             <p style="color:orangered">{{desc[loop.index0]}}</p>
                             </li>
                     </ul>
                 </div>
                 <hr>
+            {% endfor %}
+        </div>
+        <div class="table">
+            <h1>Tabel Frekuensi</h1>
+            {% for table in tables %}
+                <h2>{{col_name[loop.index]}}</h2>
+                {{ table|safe }}
             {% endfor %}
         </div>            
     </div>

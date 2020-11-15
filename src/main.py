@@ -33,9 +33,12 @@ def search():
         titles = title_txt()
         df = get_DataFrame(database)
         sim_sorted = get_similiar(query, df, database)
+<<<<<<< HEAD
+=======
         input_id = 1
         doc_url = titles
 
+>>>>>>> 89dc01ce99d4e30c8cfb5c17f31d97be2b8a0c63
     else:    
         database = retrieve_docs()
         titles = get_title()
@@ -67,8 +70,18 @@ def search():
             arrDesc.append(s[0:s.find('.')])
             arrWordCount.append(len(s.split()))
             arrCosSim.append(v*100)
+<<<<<<< HEAD
+    
+    # Table
+    documents = preprocessing_docs(database)
+    df = get_Tab(query, documents)
+    
+    # Search Result
+    return render_template('result.html', query=query, titles=arrTitles, doc_url=arrUrl, desc=arrDesc, word_count=arrWordCount, cos_sim=arrCosSim, tables=[df.to_html(classes='data')], col_name=df.columns.values)
+=======
     return render_template('result.html',UPLOAD_FOLDER=UPLOAD_FOLDER, input_id=input_id, query=query, titles=arrTitles, doc_url=doc_url, desc=arrDesc, word_count=arrWordCount, cos_sim=arrCosSim)
 
+>>>>>>> 89dc01ce99d4e30c8cfb5c17f31d97be2b8a0c63
 
 @app.route('/upload',methods=['POST'])
 def upload():
