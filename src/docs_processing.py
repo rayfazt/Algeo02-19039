@@ -13,7 +13,8 @@ from nltk.stem import PorterStemmer
 # FOR WEBSITE IMPLEMENTATION PURPOSE, SEARCH ENGINE
 import numpy as np
 import pandas as pd
-from sklearn.feature_extraction.text import TfidfVectorizer
+from tfidf import *
+from vectors import *
 
 def is_link_double(list,filename,idx):
     if (idx == 0):
@@ -121,29 +122,26 @@ def get_similar_articles(database,title):
   documents = clean_docs(database)
   filtered_documents = remove_stop_words(documents)
   stemmed_documents = stemming(filtered_documents)
-  docs = [] # Setelah di pre-procces digabung jadi satu sentence
-  for i in range(len(documents)):
-    docs.append(' '.join(stemmed_documents[i]))
 
-  # Instantiate a TfidfVectorizer object
-  vectorizer = TfidfVectorizer()
-  # It fits the data and transform it as a vector
-  X = vectorizer.fit_transform(docs)
-  # Convert the X as transposed matrix
-  X = X.T.toarray()
-  # Create a DataFrame and set the vocabulary as the index
-  df = pd.DataFrame(X, index=vectorizer.get_feature_names())
+  # Making dataframe from stemmed_docs
+  df1 = pd.DataFrame(tfidf(stemmed_documents))
+  df1 = df1.reindex(sorted(df1.columns), axis=1)
+  df1 = df1.T
 
   # Add The Query
   q = input('Enter search query: ')
   # Convert the query to a vector
-  q = [q]
-  q_vec = vectorizer.transform(q).toarray().reshape(df.shape[0],)
+  q_tfidf = tfidf2(q, stemmed_documents)
+  # Change to Dataframe for Sorting
+  qdf = pd.DataFrame(list(q_tfidf.items()),columns = ['word','values'])
+  qdf = qdf.sort_values(by = ['word'], ascending=True)
+  # Vector of query is the elements of 'values' column
+  q_vec = qdf['values'].tolist()
   sim = {}
   # Calculate the similarity
-  for i in range(10):
-    sim[i] = np.dot(df.loc[:, i].values, q_vec) / np.linalg.norm(df.loc[:, i]) * np.linalg.norm(q_vec)
-  
+  for i in range(len(stemmed_documents)):
+    sim[i] = dot_product(df1.loc[:, i].values, q_vec) / (norm(df1.loc[:, i]) * norm(q_vec))
+    
   # Sort the values 
   sim_sorted = sorted(sim.items(), key=lambda x: x[1], reverse=True)
   # Print the articles and their similarity values

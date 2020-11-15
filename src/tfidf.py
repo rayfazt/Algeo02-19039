@@ -30,19 +30,19 @@ def tfidf(documents):
     for i in range(len(documents)):
         total = set(total).union(set(documents[i]))
 
-    worddDict_list = []
+    wordDict_list = []
     for i in range(len(documents)):
         wordDict = dict.fromkeys(total,0)
         for word in documents[i]:
             wordDict[word] += 1
-        worddDict_list.append(wordDict)
+        wordDict_list.append(wordDict)
 
     tf_list = []
     for i in range(len(documents)):
-        TF = tf(worddDict_list[i], documents[i])
+        TF = tf(wordDict_list[i], documents[i])
         tf_list.append(TF)
     
-    idfs = idf(worddDict_list)
+    idfs = idf(wordDict_list)
 
     tfidf_list = []
     for i in range(len(documents)):
@@ -53,3 +53,36 @@ def tfidf(documents):
         tfidf_list.append(tfidf)
     
     return tfidf_list
+
+def tfidf2(query, documents):
+    q_words = query.split(" ")
+    q_total = set(q_words)
+    
+    total = []
+    for i in range(len(documents)):
+        total = set(total).union(set(documents[i]))
+
+    wordDict_list = []
+    for i in range(len(documents)):
+        wordDict = dict.fromkeys(total,0)
+        for word in documents[i]:
+            wordDict[word] += 1
+        wordDict_list.append(wordDict)
+
+    # Count Vector
+    wordDict = dict.fromkeys(total, 0)
+    for word in q_words:
+        error = False
+        try:
+            wordDict[word] += 1
+        except KeyError:
+            error = True
+    
+    tfs = tf(wordDict, q_words)
+    idfs = idf(wordDict_list)
+
+    tfidf = {}
+    for word, val in tfs.items():
+        tfidf[word] = val*idfs[word]
+    
+    return tfidf
