@@ -20,9 +20,10 @@ def get_txt():
     return all_docs
 
 def title_txt():
-    titles = os.listdir('txt')
+    titles = [os.path.splitext('*.txt')[0] for filename in os.listdir('txt')]
     return titles
 
+print(title_txt())
 '''
 txt = get_txt()
 title = title_txt()

@@ -5,7 +5,8 @@ def tf(wordDict, bow):
     tfDict = {}
     bowCount = len(bow)
     for word, count in wordDict.items():
-        tfDict[word] = count/float(bowCount)
+        if bowCount != 0:
+            tfDict[word] = count/float(bowCount)
     return tfDict
 
 def idf(listDocument):
