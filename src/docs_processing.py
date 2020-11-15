@@ -208,4 +208,14 @@ def get_Tab(query, documents):
   df = df.reindex(sorted(df.columns), axis=1)
   df = df.T
   
+  # Rename Column Huhu
+  column_name = []
+  for i in range(len(documents)+1):
+    if (i == 0):
+      column_name.append('Q')
+    else:
+      column_name.append('D'+str(i))
+
+  df.columns = column_name
   return df
+  
