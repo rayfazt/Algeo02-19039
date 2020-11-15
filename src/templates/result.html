@@ -14,7 +14,7 @@
     {% block content %}
     <div class="container">
         <div class="row">
-            <kbd style="background-color: burlywood;">Ini querynya: {{query}}</kbd>
+            <kbd style="background-color: rgb(5, 28, 230);">Search query: {{query}}</kbd>
         </div>
     </div>
     <div  class="row margin-top">
@@ -38,10 +38,10 @@
                 <hr>
             {% endfor %}
         </div>
-        <div class="table">
+        <div class="freqtable">
             <h1>Tabel Frekuensi</h1>
             {% for table in tables %}
-                <h2>{{col_name[loop.index]}}</h2>
+                {{col_name[loop.index]}}
                 {{ table|safe }}
             {% endfor %}
         </div>            
