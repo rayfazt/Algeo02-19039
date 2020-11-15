@@ -22,7 +22,7 @@ def search():
     uploaded_file = request.files.getlist('file')
     
     empty_files = False
-    if 'file' not in request.files:
+    if 'file' not in uploaded_file:
         empty_files = True
     
     if not (empty_files):    
@@ -73,7 +73,7 @@ def search():
     df = get_Tab(query, documents)
     
     # Search Result
-    return render_template('result.html',UPLOAD_FOLDER=UPLOAD_FOLDER, input_id=input_id, query=query, titles=arrTitles, doc_url=doc_url, desc=arrDesc, word_count=arrWordCount, cos_sim=arrCosSim, tables=[df.to_html(classes='data', header='true')])
+    return render_template('result.html', input_id=input_id, query=query, titles=arrTitles, doc_url=doc_url, desc=arrDesc, word_count=arrWordCount, cos_sim=arrCosSim, tables=[df.to_html(classes='data', header='true')])
 
 @app.route('/upload',methods=['POST'])
 def upload():
