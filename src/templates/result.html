@@ -41,7 +41,6 @@
         <div class="freqtable">
             <h1>Tabel Frekuensi</h1>
             {% for table in tables %}
-                {{col_name[loop.index]}}
                 {{ table|safe }}
             {% endfor %}
         </div>            

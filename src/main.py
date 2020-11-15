@@ -73,7 +73,7 @@ def search():
     df = get_Tab(query, documents)
     
     # Search Result
-    return render_template('result.html',UPLOAD_FOLDER=UPLOAD_FOLDER, input_id=input_id, query=query, titles=arrTitles, doc_url=doc_url, desc=arrDesc, word_count=arrWordCount, cos_sim=arrCosSim, tables=[df.to_html(classes='data')], col_name=df.columns.values)
+    return render_template('result.html',UPLOAD_FOLDER=UPLOAD_FOLDER, input_id=input_id, query=query, titles=arrTitles, doc_url=doc_url, desc=arrDesc, word_count=arrWordCount, cos_sim=arrCosSim, tables=[df.to_html(classes='data', header='true')])
 
 @app.route('/upload',methods=['POST'])
 def upload():
