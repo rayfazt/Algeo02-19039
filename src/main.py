@@ -3,7 +3,8 @@ import os
 from docs_processing import get_similar_articles
 from werkzeug.utils import secure_filename
 
-UPLOAD_FOLDER = '/Algeo02-19039/src/txt'
+UPLOAD_FOLDER = os.path.abspath('txt/')
+print(UPLOAD_FOLDER)
 
 app = Flask(__name__)
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
@@ -12,13 +13,13 @@ app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 def index():
     return render_template('index.html')
 
-@app.route('/search',methods=['POST'])
+@app.route('/search',methods=['POST','GET'])
 def search():
     query = request.form['query']
-    
-    file=request.files['file']
-    filename=secure_filename(file.filename)
-    file.save(os.path.join(app.config['UPLOAD_FOLDER'],filename))
+    uploaded_file= request.files.getlist('file')
+    for file in uploaded_file:
+        filename=secure_filename(file.filename)
+        file.save(os.path.join(app.config['UPLOAD_FOLDER'],filename))
     
     titles =['uzumaki bayu','uzumaki saburo']
     doc_url=['kipli.txt','kipli2.txt']
