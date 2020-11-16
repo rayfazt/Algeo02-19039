@@ -54,3 +54,6 @@ python main.py runserver
 * Rayhan Alghifari Fauzta (13519039)
 * M. Rafli Zamzami (13519067)
 * Raihan Astrada Fathurrahman (13519113)
+
+## Known Bugs
+* Input dokumen lewat URL hanya bisa untuk satu link saja saat ini (<https://www.thejakartapost.com/seasia>). Input dengan link lain bakal automatis pakai link yang bisa sekarang.
