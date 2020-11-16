@@ -9,7 +9,7 @@ Cara kerja program mirip dengan mesin pencari seperti Google dan Bing. Program d
 * HTML/CSS/Bootstrap
 
 ## Cara menjalankan
-*Sebelum menjalankan hal-hal dibawah, pastikan anda memiliki **Python 3.8+**, **Python3-pip**, dan juga **Python Virtual Environment** *
+*Sebelum menjalankan hal-hal dibawah, pastikan anda memiliki **Python 3.8+**, **Python3-pip**, dan juga **Python Virtual Environment***
 
 1. Clone repository
 ```
