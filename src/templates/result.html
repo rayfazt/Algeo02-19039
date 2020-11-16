@@ -58,18 +58,20 @@
                 <hr>
             {% endfor %}
         </div>
-        <div class="container-xl">
-            <div class="table-responsive">
-                <div class="table-wrapper">
-                    <h1>Tabel Frekuensi</h1>
-                    <table class="table table-striped">
-                        {% for table in tables %}
-                        {{ table|safe }}
-                        {% endfor %}
-                    </table>
+        <div class = "col-8 offset-2">
+            <div class="container-xl">
+                <h1 style="font-family: initial;">Tabel Frekuensi</h1>
+                <div class="table-responsive">
+                    <div class="table-wrapper">
+                        <table class="table table-striped">
+                            {% for table in tables %}
+                            {{ table|safe }}
+                            {% endfor %}
+                        </table>
+                    </div>
                 </div>
             </div>
-        </div>            
+        </div>       
     </div>
     <footer class="bg-light pb-5">
         <div class="container text-center">

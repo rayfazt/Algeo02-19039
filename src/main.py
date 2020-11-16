@@ -20,11 +20,11 @@ def search():
         return render_template('index.html')
     
     uploaded_file = request.files.getlist('file')
-    
+
     empty_files = False
-    if 'file' not in uploaded_file:
+    if uploaded_file[0].filename=="":
         empty_files = True
-    
+
     if not (empty_files):    
         for file in uploaded_file:
             filename=secure_filename(file.filename)
